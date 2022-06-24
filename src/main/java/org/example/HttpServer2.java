@@ -13,8 +13,6 @@ import java.sql.SQLException;
 public class HttpServer2 {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-
-
         int port = 8080;
         IDocumentStorage storage = new DocumentStorage("jdbc:mysql://localhost:3306", "bestuser", "bestuser");
         storage.prepare();

@@ -1,16 +1,25 @@
-/*
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 
 public class TestTest {
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-        Gson gson = new Gson();
+       /* List<String> list = new ArrayList<>();
+        String fileName = "order.xml";
+        String[] parts = fileName.split("\\.");
+        for(String part: parts){
+            list.add(part);
+        }
+        System.out.println(list.get(1));*/
+
+        /*Gson gson = new Gson();
         String input = "{\"file_name\":\"order.xml\",\"body\":\"PE9SREVSPgogICAgPERPQ1VNRU5UTkFNRT4yMjA8L0RPQ1VNRU5UTkFNRT4KICAgIDxOVU1CRVI+NTc5NTkwODU5NjwvTlVNQkVSPgogICAgPERBVEU+MjAxNy0xMi0wNzwvREFURT4KICAgIDxIRUFEPgogICAgICAgIDxTRU5ERVI+NzYzMDAxNjQyOTk1OTwvU0VOREVSPgogICAgICAgIDxSRUNJUElFTlQ+Njg2NDA2Njk1NDYxODwvUkVDSVBJRU5UPgogICAgPC9IRUFEPgo8L09SREVSPg==\"}";
 
         MyFile myFile = gson.fromJson(input, MyFile.class);
@@ -58,33 +67,29 @@ public class TestTest {
 
 
 
-            */
-/*while (resultSet.next()) {
+while (resultSet.next()) {
                 System.out.println(
                         resultSet.getRow() +
                         resultSet.getInt("doc_body") +
                         resultSet.getString("sender") +
                         resultSet.getString("recipient"));
-            }*//*
+            }
 
 
             //statement.executeUpdate("INSERT INTO test.docs (doc_body, sender, recipient) VALUES (order, 'sender', 'recipient')");
 
-           */
-/* resultSet.moveToInsertRow();
+ resultSet.moveToInsertRow();
             resultSet.updateString("doc_body", String.valueOf(order));
             resultSet.updateString("sender", String.valueOf(order.head));
-            resultSet.insertRow();*//*
+            resultSet.insertRow();
 
 
-            */
-/*resultSet.beforeFirst();
+resultSet.beforeFirst();
             while (resultSet.next()) {
                 System.out.println(resultSet.getString("doc_body"));
-            }*//*
+            }
 
 
-        }
+        }*/
     }
 }
-*/

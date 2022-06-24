@@ -18,11 +18,11 @@ import java.util.Map;
 
 public class MyHandler implements HttpHandler {
 
-    private static final Map <String, Class> ALLOW_TYPES = new HashMap<>(){
+    /*private static final Map <String, Class> ALLOW_TYPES = new HashMap<>(){
         {
             put("ORDER", Order.class);
         }
-    };
+    };*/
 
     private IDocumentStorage storage;
 
@@ -33,10 +33,12 @@ public class MyHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
+        //считывание post запроса в байты
         InputStream inputStream = exchange.getRequestBody();
         System.out.println("inputStream: " + inputStream);
         String jsonBody = null;
         try {
+            //преобразование из байтов в json
             jsonBody = new String(inputStream.readAllBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,19 +46,30 @@ public class MyHandler implements HttpHandler {
         System.out.println("jsonBody: " + jsonBody);
 
         try {
+            //парсинг из json в объект
             FileFromServer fileFromServer = JsonUtils.parseFromJson(FileFromServer.class, jsonBody);
-            System.out.println("fileFromServer " + fileFromServer);
+            System.out.println("fileFromServer: " + fileFromServer);
+            System.out.println("fileFromServer.getFileName(): " + fileFromServer.getFileName());
 
+            //расшифровка из base64
             byte[] body = Base64.getDecoder().decode(fileFromServer.getBody());
-            String docType = XmlUtils.getRootElement(body);
+            System.out.println("body: " + body);
+
+            //получение корневого элемента
+            /*String docType = XmlUtils.getRootElement(body);
+            System.out.println("docType: " + docType);*/
+
+            //получение расширения файла
+            String docType = XmlUtils.getDocumentExtension(fileFromServer.getFileName());
 
             //Class type = ALLOW_TYPES.get(docType);
 
             Order order = XmlUtils.xmlToObject(body, Order.class);
             System.out.println("order: " + order);
-            storage.insert(docType, JsonUtils.parseToJson(order).getBytes(), order.getHead().getSender(), order.getHead().getRecipient(), fileFromServer.getFileName());
 
+            storage.insert(docType, JsonUtils.parseToJson(order).getBytes(), order.getHead().getSender(), order.getHead().getRecipient(), fileFromServer.getFileName());
             System.out.println("inserted to storage");
+
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

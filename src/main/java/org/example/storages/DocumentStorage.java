@@ -7,12 +7,10 @@ import java.sql.Statement;
 
 import java.sql.*;
 
-
 public class DocumentStorage implements IDocumentStorage {
-
-    private String url;
-    private String user;
-    private String pass;
+    private final String url;
+    private final String user;
+    private final String pass;
 
     public DocumentStorage(String url, String user, String pass) throws ClassNotFoundException {
         this.url = url;
@@ -24,10 +22,8 @@ public class DocumentStorage implements IDocumentStorage {
     @Override
     public void prepare() throws SQLException {
 
-
-        try (
-                Connection connection = DriverManager.getConnection(url, user, pass);
-                Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
             statement.execute("drop table if exists test.docs");
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS test.docs (" +
                     "doc_id int NOT NULL AUTO_INCREMENT," +
@@ -37,17 +33,14 @@ public class DocumentStorage implements IDocumentStorage {
                     "recipient varchar(255) DEFAULT NULL," +
                     "file_name varchar(255) DEFAULT NULL," +
                     "PRIMARY KEY (doc_id), UNIQUE KEY doc_id_UNIQUE (doc_id))");
-
         }
         System.out.println("table created");
     }
 
     public void insert(String docType, byte[] docBody, String sender, String recipient, String fileName) throws SQLException, ClassNotFoundException {
 
-        System.out.println("before insert");
-
         try (Connection connection = DriverManager.getConnection(url, user, pass)) {
-            String query = "INSERT INTO test.docs (doc_type, doc_body, sender, recipient, file_name) VALUES (?, ?, ?, ?, ?)";
+             String query = "INSERT INTO test.docs (doc_type, doc_body, sender, recipient, file_name) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement prepared = connection.prepareStatement(query)) {
                 prepared.setString(1, docType);
                 prepared.setBytes(2, docBody);
@@ -58,14 +51,5 @@ public class DocumentStorage implements IDocumentStorage {
             }
         }
         System.out.println("inserted to table");
-
-    }
-
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
-
-        IDocumentStorage storage = new DocumentStorage("jdbc:mysql://localhost:3306", "bestuser", "bestuser");
-
-        storage.insert("json", "123qwerty".getBytes(), "sender", "recipient", "myFile");
-
     }
 }
