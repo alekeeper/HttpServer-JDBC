@@ -1,7 +1,17 @@
 import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +19,19 @@ import java.util.Base64;
 import java.util.List;
 
 public class TestTest {
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+
+        /*InputSource is = new InputSource();
+        is.setCharacterStream(new StringReader());
+
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = dbf.newDocumentBuilder();
+
+        Document doc = builder.parse(is);
+        Node node = doc.getDocumentElement();
+        String root = node.getNodeName();
+        //Element root = doc.getDocumentElement();
+        System.out.println(root);*/
 
        /* List<String> list = new ArrayList<>();
         String fileName = "order.xml";

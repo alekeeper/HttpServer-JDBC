@@ -6,23 +6,23 @@ import org.example.server.entity.FileFromServer;
 import org.example.storages.IDocumentStorage;
 import org.example.utils.JsonUtils;
 import org.example.utils.XmlUtils;
-import org.example.xml.model.Order;
+import org.example.xml.model.IDocument;
+import org.example.xml.model.ORDER;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MyHandler implements HttpHandler {
 
-    /*private static final Map <String, Class> ALLOW_TYPES = new HashMap<>(){
+    private static final Map <String, Class> ALLOW_TYPES = new HashMap<>(){
         {
-            put("ORDER", Order.class);
+            put("ORDER", ORDER.class);
         }
-    };*/
+    };
 
     private IDocumentStorage storage;
 
@@ -56,21 +56,20 @@ public class MyHandler implements HttpHandler {
             System.out.println("body: " + body);
 
             //получение корневого элемента
-            /*String docType = XmlUtils.getRootElement(body);
-            System.out.println("docType: " + docType);*/
+            String docType = XmlUtils.getRootElement(body);
+            System.out.println("docType: " + docType);
 
-            //получение расширения файла
-            String docType = XmlUtils.getDocumentExtension(fileFromServer.getFileName());
+            Class type = ALLOW_TYPES.get(docType);
+            System.out.println("type.getClass: " + type.getName());
 
-            //Class type = ALLOW_TYPES.get(docType);
+            IDocument iDocument = XmlUtils.xmlToObject(body, type);
+            System.out.println("iDocument: " + iDocument);
 
-            Order order = XmlUtils.xmlToObject(body, Order.class);
-            System.out.println("order: " + order);
-
-            storage.insert(docType, JsonUtils.parseToJson(order).getBytes(), order.getHead().getSender(), order.getHead().getRecipient(), fileFromServer.getFileName());
+            storage.insert(docType, JsonUtils.parseToJson(iDocument).getBytes(), iDocument.getSender(),
+                    iDocument.getRecipient(), fileFromServer.getFileName());
             System.out.println("inserted to storage");
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (Exception | Error e) {
             e.printStackTrace();
         }
 
@@ -80,12 +79,5 @@ public class MyHandler implements HttpHandler {
         os.write(response.getBytes());
         os.close();
         System.out.println(response);
-
-        /*byte[] bytes = fileFromServer.toString().getBytes();
-        exchange.sendResponseHeaders(200, bytes.length);
-
-        OutputStream outputStream = exchange.getResponseBody();
-        outputStream.write(bytes);
-        outputStream.close();*/
     }
 }

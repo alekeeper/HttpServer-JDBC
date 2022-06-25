@@ -6,7 +6,7 @@ public class JsonUtils {
 
     private static final Gson gson = new Gson();
 
-    public static <T> T parseFromJson(Class <T> clazz, String input) throws ClassNotFoundException {
+    public static <T> T parseFromJson(Class <T> clazz, String input) {
         return gson.fromJson(input, clazz);
     }
 

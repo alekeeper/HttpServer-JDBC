@@ -3,7 +3,7 @@ package org.example.xml.model;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 @XStreamAlias("ORDER")
-public class Order {
+public class ORDER implements IDocument {
 
     @XStreamAlias("DOCUMENTNAME")
     private String documentName;
@@ -15,11 +15,7 @@ public class Order {
     private String date;
 
     @XStreamAlias("HEAD")
-    public Head head = new Head();
-
-    public Head getHead() {
-        return head;
-    }
+    private Head head;
 
     public String getDocumentName() {
         return documentName;
@@ -29,6 +25,16 @@ public class Order {
     }
     public String getDate() {
         return date;
+    }
+
+    @Override
+    public String getSender() {
+        return head.getSender();
+    }
+
+    @Override
+    public String getRecipient() {
+        return head.getRecipient();
     }
 
     @Override
